@@ -1,0 +1,14 @@
+---- Create venv ----
+Win py/python -m venv venv
+macOS python3 -m venv venv
+
+---- Activate venv ----
+Win py/pythong venv\Scripts\Activate
+macOS source venv/bin/Activate
+
+---- Install Flask ----
+pip install Flask
+
+---- Run App ----
+Win py/python server.py
+macOS python3

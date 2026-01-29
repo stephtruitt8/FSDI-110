@@ -132,6 +132,47 @@ def create_product():
         }), 201 # Created
 
 
+# DELETE /api/products/<int:product_id>
+@app.route("/api/products/<int:product_id>", methods=["DELETE"])
+def delete_product(product_id):
+    for index, product in enumerate(products):
+        if product["_id"] == product_id:
+            products.pop(index)
+            return jsonify({
+                "success": True,
+                "message": "Product deleted successfully"
+            }), 200 # OK
+
+    return jsonify({
+        "success": False,
+        "message": "Product not found"
+    }), 404 # Not Found
+
+
+# PUT /api/products/<int:product_id>
+@app.route("/api/products/<int:product_id>", methods=["PUT"])
+def update_product(product_id):
+    data = request.get_json()
+    for product in products:
+        if product["_id"] == product_id:
+            product["title"] = data["title"]
+            product["price"] = data["price"]
+            product["category"] = data["category"]
+            product["image"] = data["image"]
+
+            return jsonify({
+                "success": True,
+                "message": "Product updated successfully",
+                "data": product
+            }), 200 # OK
+
+    return jsonify({
+        "success": False,
+        "message": "Product not found"
+    }), 404 # Not Found
+
+
+
 
 # ---- Coupons ----
 
@@ -153,7 +194,7 @@ def coupon_count():
 
 #GET /api/coupons
 
-@app.route("/api/coupons", methods=["GET"])
+@app.route("/api/coupons/<int:coupon_id>", methods=["GET"])
 def get_coupons():
     coupons = [
         {"_id": 1, "code": "SAVE10", "discount": "10%"},
@@ -170,7 +211,7 @@ def get_coupons():
 
 #POST /api/coupons
 
-@app.route("/api/coupons", methods=["POST"])
+@app.route("/api/coupons/<int:coupon_id>", methods=["POST"])
 def create_coupon():
     new_coupon = request.get_json()
     print(new_coupon)
@@ -180,6 +221,50 @@ def create_coupon():
             "message": "Coupon created successfully",
             "coupon": new_coupon
         }), 201 # Created
+
+
+# PUT /api/coupons/<int:coupon_id>
+
+@app.route("/api/coupons/<int:coupon_id>", methods=["PUT"])
+def update_coupon(coupon_id):
+    data = request.get_json()
+    for product in products:
+        if product["_id"] == product_id:
+            product["code"] = data["code"]
+            product["discount"] = data["discount"]
+
+            updated_coupon = {
+                "_id": coupon_id,
+                "code": data["code"],
+                "discount": data["discount"]
+            }
+
+    return jsonify({
+        "success": True,
+        "message": "Coupon updated successfully",
+        "coupon": updated_coupon
+    }), 200 # OK
+
+
+
+# DELETE /api/coupons/<int:coupon_id>
+
+@app.route("/api/coupons/<int:coupon_id>", methods=["DELETE"])
+def delete_coupon(coupon_id):
+    for index, coupon in enumerate(coupons):
+        if coupon["_id"] == coupon_id:
+            coupons.pop(index)
+
+            return jsonify({
+                "success": True,
+                "message": "Coupon deleted successfully"
+            }), 200 # OK
+
+    return jsonify({
+        "success": False,
+        "message": "Coupon not found"
+    }), 404 # Not Found
+
 
 
 #-----
